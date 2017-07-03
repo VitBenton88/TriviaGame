@@ -25,6 +25,18 @@ header h1 {
 	margin: 0 0 0 0;
 }
 
+button {
+	background-color:#FFD90F;
+	font-family: 'Indie Flower', cursive;
+	font-size: 80px;
+	padding: 15px;
+	width: 250px;
+	border-style: none;
+	display: block;
+	margin: 100px auto;
+	opacity: 1;
+}
+
 #timerBox {
 	font-family: 'Rubik', sans-serif;
 	margin: auto;
@@ -33,6 +45,7 @@ header h1 {
 
 #timeHeading {
 	margin: 0 0 0 0;
+	font-size: 50px;
 	text-decoration: underline;
 	display: none;
 }
@@ -50,32 +63,55 @@ section {
 	margin: auto;
 	font-family: 'Rubik', sans-serif;
 	text-align: center;
+	visibility: hidden;
+	padding: 20px;
 }
 
-button {
-	background-color:#FFD90F;
-	font-family: 'Indie Flower', cursive;
+#currentQuestion {
+	margin: 0px 0px 40px 0px;
+	font-size: 60px;
+	color: #FFD90F;
+	text-shadow: 2px 2px black;
+}
+
+li {
 	font-size: 50px;
-	padding: 10px 10px 10px 10px;
-	width: 200px;
-	border-style: none;
-	margin-top: 200px;
-	opacity: 1;
+	width: 33%;
+	margin: 35px auto;
+	user-select: none;
 }
 
-button:hover {
+#startButton:hover {
 	cursor: pointer;
 	box-shadow: 5px 5px 15px #404040;
 	border: 5px solid black;
 }
 
-button:active {
+#startButton:active {
 	cursor: pointer;
 	box-shadow: 2px 2px 5px #404040;
 	border: 0px solid black;
 	opacity: 0.5;
 }
 
-button:focus {
+#startButton:focus {
+	outline: none;
+}
+
+li:hover {
+	cursor: pointer;
+	box-shadow: 5px 5px 15px #404040;
+	border: 5px solid black;
+	background-color: #FFD90F;
+}
+
+li:active {
+	cursor: pointer;
+	box-shadow: 2px 2px 5px #404040;
+	border: 0px solid black;
+	opacity: 0.5;
+}
+
+li:focus {
 	outline: none;
 }
