@@ -59,9 +59,24 @@ $(document).ready(function() {
 		},
 	};
 
+	var question5 = {
+		questionText: "What instrument does Lisa play?",
+		answerOptions: ['Flute','Guitar','Clarinet','Saxophone'],
+		correctAnswer: 'Saxophone',
+		rightAnswerImg: "assets/images/congrats5.gif",
+		wrongAnswerImg: "assets/images/wrong5.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Flute")').addClass('wrongAnswer');
+			$('li:contains("Guitar")').addClass('wrongAnswer');
+			$('li:contains("Saxophone")').addClass('answer');
+			$('li:contains("Clarinet")').addClass('wrongAnswer');
+		},
+	};
+
 	//----------------END OF OBJECTS
 
-	var allQuestions = [question1, question2, question3, question4];
+	var allQuestions = [question1, question2, question3, question4, question5];
 	var currentQuestion = 0;
 	var time = 30;
 	var intervalTime = 5;
@@ -99,6 +114,8 @@ $(document).ready(function() {
 			reset();
 			totalMisses++;
 			nextQuestion();
+			printTime(intervalTime);
+			startInterval();
 			$("#listOptions").empty();
 			$("#gifBox").html("<img src='" + outOfTimeImg + "'>");
 			$('#currentQuestion').html("Correct Answer:<br>" + currentCorrectAnswer);
