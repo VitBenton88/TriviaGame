@@ -3,27 +3,42 @@ $(document).ready(function() {
 		questionText: "What was the name of Homer's pet monkey?",
 		answerOptions: ['Snowball','Pinchy','Mojo','Hendrix'],
 		correctAnswer: 'Mojo',
-		rightAnswerImg: "../images/congrats1.gif",
-		wrongAnswerImg: "../images/wrong1.gif",
+		rightAnswerImg: "assets/images/congrats1.gif",
+		wrongAnswerImg: "assets/images/wrong1.gif",
 
-		checkAnswer: function(){ //functiont that add .answer to <li> that contain correct answer
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Snowball")').addClass('wrongAnswer');
+			$('li:contains("Pinchy")').addClass('wrongAnswer');
 			$('li:contains("Mojo")').addClass('answer');
+			$('li:contains("Hendrix")').addClass('wrongAnswer');
 		},
 	};
 
 	var question2 = {
-		questionText: "How does this SECOND test question look?",
-		answerOptions: ['Option0','Option1','Option2','Option3'],
-		correctAnswer: 'Option2',
-		rightAnswerImg: "../images/congrats2.gif",
-		wrongAnswerImg: "../images/wrong2.gif",
+		questionText: "Who is Bart's best friend?",
+		answerOptions: ['Lisa','Nelson','Ralph','Milhouse'],
+		correctAnswer: 'Milhouse',
+		rightAnswerImg: "assets/images/congrats2.gif",
+		wrongAnswerImg: "assets/images/wrong2.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Lisa")').addClass('wrongAnswer');
+			$('li:contains("Nelson")').addClass('wrongAnswer');
+			$('li:contains("Milhouse")').addClass('answer');
+			$('li:contains("Ralph")').addClass('wrongAnswer');
+		},
 	};
 
 	//----------------END OF OBJECTS
 
-	var allQuestions = [question1, question2]
+	var allQuestions = [question1, question2];
+	var currentQuestion = 0;
 	var time = 30;
+	var intervalTime = 5;
+	var intervalTimeId;
 	var intervalId;
+	var totalScore = 0;
+	var totalMisses = 0;
 
 	//----------------END OF GLOBAL VARIABLES
 
@@ -38,15 +53,16 @@ $(document).ready(function() {
 	};
 
 	//print current time:
-	function printTime(){
-		$('#timerDigits').html(time)
+	function printTime(timerType){
+		$('#timerDigits').html(timerType)
 	};
 
-	//countdown mechanism:
+	//countdown mechanism for main timer:
 	function decrement (){
 		time--;
-		printTime();
+		printTime(time);
 		if (time === 0){
+			clearMainTime();
 			reset();
 		}
 		else if (time<11){
@@ -54,15 +70,84 @@ $(document).ready(function() {
 		};
 	};
 
-	//start countdown
+	//countdown mechanism for interval timer and switch to next question:
+	function intervalCountdown (){
+		intervalTime--;
+		printTime(intervalTime);
+		if (intervalTime === 0){
+			reset();
+			start();
+			clearIntervalTime();
+			resetIntervalTime();
+			$("#gifBox").empty();
+			questionGen(allQuestions[currentQuestion]);
+		};
+	};
+
+	//start main countdown
 	function start(){
 		intervalId = setInterval(decrement, 1000);
 	};
 
-	//reset time
+	//start interval countdown
+	function startInterval(){
+		intervalTimeId = setInterval(intervalCountdown, 1000);
+	};
+
+	//clear main timer inervalID:
+
+	function clearMainTime(){
+		clearInterval(intervalId);
+	};
+
+	//clear interval timer inervalID:
+
+	function clearIntervalTime(){
+		clearInterval(intervalTimeId);
+	};
+
+	//reset main time
 	function reset(){
 		time = 31;
 		fontBlack();
+	};
+
+	//reset interval time
+	function resetIntervalTime(){
+		intervalTime = 5;
+	};
+
+	//notify that correct answer has been selected:
+
+	function correctAlert(){
+		$('#currentQuestion').html("You answered correctly!")
+	};
+
+	//notify that incorrect answer has been selected:
+
+	function incorrectAlert(){
+		$('#currentQuestion').html("Wrong Answer!")
+	};
+
+
+	//clear <section> and show this correct answer GIF:
+
+	function postCongratsGif(question){
+		$("#listOptions").empty();
+		$("#gifBox").html("<img src='" + question.rightAnswerImg + "'>")
+	};
+
+	//clear <section> and show this wrong answer GIF:
+
+	function postWrongGif(question){
+		$("#listOptions").empty();
+		$("#gifBox").html("<img src='" + question.wrongAnswerImg + "'>")
+	};
+
+	//question index increment:
+
+	function nextQuestion (increment){
+		currentQuestion++;
 	};
 
 	//Posts relevant content for each question and marks li that contains right answer with .answer class
@@ -71,9 +156,26 @@ $(document).ready(function() {
 		$('#currentQuestion').html(question.questionText);
 			for (i = 0; i < question.answerOptions.length; i++){
 				$('#listOptions').append('<li>' + question.answerOptions[i] + '</li>');
-				question.checkAnswer();
+				question.findAnswer();
 			};
-
+			$('.answer').click(function(){
+				clearMainTime();
+				totalScore++;
+				nextQuestion();
+				correctAlert();
+				postCongratsGif(question);
+				printTime(intervalTime);
+				startInterval();
+			});
+			$('.wrongAnswer').click(function(){
+				clearMainTime();
+				totalMisses++;
+				nextQuestion();
+				incorrectAlert();
+				postWrongGif(question);
+				printTime(intervalTime);
+				startInterval();
+			});
 	};
 
 	//----------------END OF GLOBAL FUNCTIONS
@@ -82,13 +184,11 @@ $(document).ready(function() {
 		$('#startButton').css('display','none'); //hide start button
 		$('#timeHeading').css('display','initial'); //show timer heading
 		$('section').css('visibility','visible'); //show box with question content
-		questionGen(question1);
-		start(); //start countdown timer
-		printTime(); //show current time
-		$('.answer').click(function(){
-			reset();
-		});
+		start();
+		printTime(time);
+		questionGen(allQuestions[currentQuestion]);
 	});
+
 
 //----------------------------------------------------------------END OF SCRIPT	
 });

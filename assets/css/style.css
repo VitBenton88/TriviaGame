@@ -59,8 +59,8 @@ section {
 	background-color: rgba(255,255,255,0.8);
 	box-shadow: 6px 6px 15px #404040;
 	width: 90%;
-	height: 500px;
-	margin: auto;
+	height: auto;
+	margin: 0 auto 20px auto;
 	font-family: 'Rubik', sans-serif;
 	text-align: center;
 	visibility: hidden;
@@ -79,6 +79,7 @@ li {
 	width: 33%;
 	margin: 35px auto;
 	user-select: none;
+	border: 5px solid rgba(255,255,255,.01);
 }
 
 #startButton:hover {
@@ -108,10 +109,15 @@ li:hover {
 li:active {
 	cursor: pointer;
 	box-shadow: 2px 2px 5px #404040;
-	border: 0px solid black;
+	border: 5px solid rgba(255,255,255,.01);
 	opacity: 0.5;
 }
 
 li:focus {
 	outline: none;
+}
+
+#gifBox img {
+	width: 500px;
+	height: auto;
 }
