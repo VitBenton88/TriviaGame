@@ -29,9 +29,39 @@ $(document).ready(function() {
 		},
 	};
 
+	var question3 = {
+		questionText: "What are the names of Flanders' sons?",
+		answerOptions: ['Rod & Todd','Rod & Johnny','Ralph & Todd','Martin & Ralph'],
+		correctAnswer: 'Milhouse',
+		rightAnswerImg: "assets/images/congrats3.gif",
+		wrongAnswerImg: "assets/images/wrong3.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Rod & Johnny")').addClass('wrongAnswer');
+			$('li:contains("Ralph & Todd")').addClass('wrongAnswer');
+			$('li:contains("Rod & Todd")').addClass('answer');
+			$('li:contains("Martin & Ralph")').addClass('wrongAnswer');
+		},
+	};
+
+	var question4 = {
+		questionText: "Who shot Mr. Burns?",
+		answerOptions: ['Smithers','Maggie','Chief Wiggum','Snake Jailbird'],
+		correctAnswer: 'Maggie',
+		rightAnswerImg: "assets/images/congrats4.gif",
+		wrongAnswerImg: "assets/images/wrong4.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Smithers")').addClass('wrongAnswer');
+			$('li:contains("Chief Wiggum")').addClass('wrongAnswer');
+			$('li:contains("Maggie")').addClass('answer');
+			$('li:contains("Snake Jailbird")').addClass('wrongAnswer');
+		},
+	};
+
 	//----------------END OF OBJECTS
 
-	var allQuestions = [question1, question2];
+	var allQuestions = [question1, question2, question3, question4];
 	var currentQuestion = 0;
 	var time = 30;
 	var intervalTime = 5;
@@ -39,6 +69,8 @@ $(document).ready(function() {
 	var intervalId;
 	var totalScore = 0;
 	var totalMisses = 0;
+	var outOfTimeImg = "assets/images/outOfTime.gif"
+	var currentCorrectAnswer;
 
 	//----------------END OF GLOBAL VARIABLES
 
@@ -62,8 +94,15 @@ $(document).ready(function() {
 		time--;
 		printTime(time);
 		if (time === 0){
+			fontBlack();
 			clearMainTime();
 			reset();
+			totalMisses++;
+			nextQuestion();
+			$("#listOptions").empty();
+			$("#gifBox").html("<img src='" + outOfTimeImg + "'>");
+			$('#currentQuestion').html("Correct Answer:<br>" + currentCorrectAnswer);
+
 		}
 		else if (time<11){
 			fontRed();
@@ -157,6 +196,7 @@ $(document).ready(function() {
 			for (i = 0; i < question.answerOptions.length; i++){
 				$('#listOptions').append('<li>' + question.answerOptions[i] + '</li>');
 				question.findAnswer();
+				currentCorrectAnswer = question.correctAnswer;
 			};
 			$('.answer').click(function(){
 				fontBlack();
