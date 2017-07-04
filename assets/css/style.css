@@ -11,14 +11,14 @@ header {
 	font-family: 'Indie Flower', cursive;
 }
 
-img {
+#headerImg {
 	display: block;
 	width: 300px;
 	height: auto;
 	margin: auto;
 }
 
-header h1 {
+#triviaText {
 	font-size: 70px;
 	color: #FFD90F;
 	text-shadow: 2px 2px black;

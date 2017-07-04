@@ -159,6 +159,7 @@ $(document).ready(function() {
 				question.findAnswer();
 			};
 			$('.answer').click(function(){
+				fontBlack();
 				clearMainTime();
 				totalScore++;
 				nextQuestion();
@@ -168,6 +169,7 @@ $(document).ready(function() {
 				startInterval();
 			});
 			$('.wrongAnswer').click(function(){
+				fontBlack();
 				clearMainTime();
 				totalMisses++;
 				nextQuestion();
@@ -181,6 +183,8 @@ $(document).ready(function() {
 	//----------------END OF GLOBAL FUNCTIONS
 
 	$('#startButton').click(function(){ //when start button is clicked
+		$('#headerImg').css('width','150px'); //shrink header img, better for smaller screens
+		$('#triviaText').css('font-size','50px'); //see last comment ^
 		$('#startButton').css('display','none'); //hide start button
 		$('#timeHeading').css('display','initial'); //show timer heading
 		$('section').css('visibility','visible'); //show box with question content
