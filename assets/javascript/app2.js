@@ -103,10 +103,14 @@ $(document).ready(function() {
 			clearInterval(this.intervalId);
 		},
 
+		stop: function(){
+			mainTimer.clearTimeInterval();
+			mainTimer.reset();
+		},
+
 		timeRunout: function(){
 			if (this.time === -1){
-				mainTimer.reset();
-				mainTimer.clearTimeInterval();
+				mainTimer.stop();
 				nextQuestion();
 				totalMisses++;
 				intervalTimer.printTime();
@@ -149,13 +153,16 @@ $(document).ready(function() {
 			clearInterval(this.intervalId);
 		},
 
+		stop: function(){
+			intervalTimer.clearTimeInterval();
+			intervalTimer.reset();
+		},
+
 		timeRunout: function(){
 			if (this.time === -1){
-				mainTimer.reset();
 				mainTimer.start();
 				mainTimer.printTime();
-				intervalTimer.clearTimeInterval;
-				intervalTimer.reset();
+				intervalTimer.stop();
 				$("#gifBox").empty();
 				questionGen(allQuestions[currentQuestion]);
 			};
@@ -206,12 +213,14 @@ $(document).ready(function() {
 		$('#currentQuestion').html(question.questionText);//print current question to HTML
 			for (i = 0; i < question.answerOptions.length; i++){//for loop pushes answer options into <ul> as <li>s
 				$('#listOptions').append('<li>' + question.answerOptions[i] + '</li>');
+				$('#timeHeading').html('Seconds Remaining:');//print 'seconds remaining' to header above question
 				question.findAnswer();//find answer in HTML and mark with class=answer
 				currentCorrectAnswer = question.correctAnswer;//store current correct answer in global variable to print to HTML if time runs out
 			};
 			$('.answer').click(function(){//if the right answer is clicked ...
+				$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question
 				fontBlack();//make time font black incase it went red if <11
-				mainTimer.clearTimeInterval();//clear interval for mainTimer
+				mainTimer.stop();//clear interval for mainTimer
 				totalScore++;//tally score to totalScore
 				nextQuestion();//add to currentQuestion value to make next question run in questionGen()
 				correctAlert();//display correct answer screen
@@ -220,8 +229,9 @@ $(document).ready(function() {
 				intervalTimer.start();//begin countdown of intervaltimer
 			});
 			$('.wrongAnswer').click(function(){
+				$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question
 				fontBlack();
-				mainTimer.clearTimeInterval();
+				mainTimer.stop();
 				totalMisses++;//tally misses
 				nextQuestion();//add to currentQuestion value to make next question run in questionGen()
 				incorrectAlert();//display wrong answer screen
