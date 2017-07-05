@@ -32,7 +32,7 @@ $(document).ready(function() {
 	var question3 = {
 		questionText: "What are the names of Flanders' sons?",
 		answerOptions: ['Rod & Todd','Rod & Johnny','Ralph & Todd','Martin & Ralph'],
-		correctAnswer: 'Milhouse',
+		correctAnswer: 'Rod & Todd',
 		rightAnswerImg: "assets/images/congrats3.gif",
 		wrongAnswerImg: "assets/images/wrong3.gif",
 
@@ -233,7 +233,7 @@ $(document).ready(function() {
 	};
 
 	function incorrectAlert(){
-		$('#currentQuestion').html("Wrong Answer!")
+		$('#currentQuestion').html("Wrong Answer!<br>The correct answer is " + currentCorrectAnswer)
 	};
 
 	function fontBlack (){
