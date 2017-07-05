@@ -74,6 +74,51 @@ $(document).ready(function() {
 		},
 	};
 
+	var question6 = {
+		questionText: "What is the name of Mr. Burns' beloved teddy bear?",
+		answerOptions: ['Bobo','Santas Little Helper','Moe','Teddy'],
+		correctAnswer: 'Bobo',
+		rightAnswerImg: "assets/images/congrats6.gif",
+		wrongAnswerImg: "assets/images/wrong6.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Santas Little Helper")').addClass('wrongAnswer');
+			$('li:contains("Teddy")').addClass('wrongAnswer');
+			$('li:contains("Bobo")').addClass('answer');
+			$('li:contains("Moe")').addClass('wrongAnswer');
+		},
+	};
+
+	var question7 = {
+		questionText: "What is the name of Springfield's neighboring town?",
+		answerOptions: ['Springfield 2','Cypress Creek','Shelbyville','Flushing Meadows'],
+		correctAnswer: 'Shelbyville',
+		rightAnswerImg: "assets/images/congrats7.gif",
+		wrongAnswerImg: "assets/images/wrong7.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Flushing Meadows")').addClass('wrongAnswer');
+			$('li:contains("Cypress Creek")').addClass('wrongAnswer');
+			$('li:contains("Shelbyville")').addClass('answer');
+			$('li:contains("Springfield 2")').addClass('wrongAnswer');
+		},
+	};
+
+	var question8 = {
+		questionText: "What kind of animal is Homer's Spirit Guide?",
+		answerOptions: ['Tortoise','Coyote','Hawk','Homer Has No Spirit Guide'],
+		correctAnswer: 'Coyote',
+		rightAnswerImg: "assets/images/congrats8.gif",
+		wrongAnswerImg: "assets/images/wrong8.gif",
+
+		findAnswer: function(){ //function that adds .answer to <li> that contains correct answer and .wrongAnswer to <li>s that don't
+			$('li:contains("Homer Has No Spirit Guide")').addClass('wrongAnswer');
+			$('li:contains("Hawk")').addClass('wrongAnswer');
+			$('li:contains("Coyote")').addClass('answer');
+			$('li:contains("Tortoise")').addClass('wrongAnswer');
+		},
+	};
+
 	var mainTimer = {
 		time: 30,
 		intervalId: '',
@@ -170,7 +215,7 @@ $(document).ready(function() {
 	};
 	//----------------END OF OBJECTS
 
-	var allQuestions = [question1, question2, question3, question4, question5];
+	var allQuestions = [question1, question2, question3, question4, question5, question6, question7, question8];
 	var currentQuestion = 0;
 	var totalScore = 0;
 	var totalMisses = 0;
