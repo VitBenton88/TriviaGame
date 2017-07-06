@@ -162,7 +162,8 @@ $(document).ready(function() {
 				intervalTimer.start();
 				$("#listOptions").empty();
 				$("#gifBox").html("<img src='" + outOfTimeImg + "'>");
-				$('#currentQuestion').html("Correct Answer:<br>" + currentCorrectAnswer);
+				$('#currentQuestion').html("Out Of Time!<br>The correct answer is:");
+				$('#displayCorrectAnswer').html(currentCorrectAnswer);
 			}
 
 			else if (this.time < 11){
@@ -204,12 +205,26 @@ $(document).ready(function() {
 		},
 
 		timeRunout: function(){
-			if (this.time === -1){
+			if (this.time === -1 && !gameEnds){
+				$('#displayCorrectAnswer').html('');
 				mainTimer.start();
 				mainTimer.printTime();
 				intervalTimer.stop();
 				$("#gifBox").empty();
 				questionGen(allQuestions[currentQuestion]);
+			}
+
+			else if (this.time === -1 && gameEnds) {
+				intervalTimer.stop();
+				$('#stats').css('display','initial');
+				$('#totalCorrect').html('Total Correct: ' + totalScore);
+				$('#totalIncorrect').html('Total Incorrect: ' + totalMisses);
+				$('#displayCorrectAnswer').html('');
+				$('#restartButton').css('display','initial');
+				$('#timeHeading').html('');
+				$('#timerDigits').html("");
+				$('#currentQuestion').html("End Of Game!");
+				$("#gifBox").html("<img src='" + endOfGameImg + "'>")
 			};
 		},
 	};
@@ -219,8 +234,10 @@ $(document).ready(function() {
 	var currentQuestion = 0;
 	var totalScore = 0;
 	var totalMisses = 0;
-	var outOfTimeImg = "assets/images/outOfTime.gif"
+	var outOfTimeImg = "assets/images/outOfTime.gif";
+	var endOfGameImg =  "assets/images/end.gif";
 	var currentCorrectAnswer;
+	var gameEnds = false;
 
 	//----------------END OF GLOBAL VARIABLES
 
@@ -228,16 +245,17 @@ $(document).ready(function() {
 		$('#timerDigits').css('color','red')
 	};
 
+	function fontBlack (){
+		$('#timerDigits').css('color','black')
+	};
+
 	function correctAlert(){
 		$('#currentQuestion').html("You answered correctly!")
 	};
 
 	function incorrectAlert(){
-		$('#currentQuestion').html("Wrong Answer!<br>The correct answer is " + currentCorrectAnswer)
-	};
-
-	function fontBlack (){
-		$('#timerDigits').css('color','black')
+		$('#currentQuestion').html("Wrong Answer!<br>The correct answer is:");
+		$('#displayCorrectAnswer').html(currentCorrectAnswer);
 	};
 
 	function postCongratsGif(question){
@@ -252,9 +270,11 @@ $(document).ready(function() {
 
 	function nextQuestion (increment){
 		currentQuestion++;
+		$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question during interval
 	};
 
 	function questionGen(question){
+		endCheck();
 		$('#currentQuestion').html(question.questionText);//print current question to HTML
 			for (i = 0; i < question.answerOptions.length; i++){//for loop pushes answer options into <ul> as <li>s
 				$('#listOptions').append('<li>' + question.answerOptions[i] + '</li>');
@@ -263,27 +283,54 @@ $(document).ready(function() {
 				currentCorrectAnswer = question.correctAnswer;//store current correct answer in global variable to print to HTML if time runs out
 			};
 			$('.answer').click(function(){//if the right answer is clicked ...
-				$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question
+				totalScore++;//tally score to totalScore
+			if (!gameEnds){
 				fontBlack();//make time font black incase it went red if <11
 				mainTimer.stop();//clear interval for mainTimer
-				totalScore++;//tally score to totalScore
 				nextQuestion();//add to currentQuestion value to make next question run in questionGen()
 				correctAlert();//display correct answer screen
 				postCongratsGif(question);//display current correct answer gif (varies by question)
 				intervalTimer.printTime();//print interval time value to html
 				intervalTimer.start();//begin countdown of intervaltimer
-			});
+			}
+			else {
+				$('#timeHeading').html('Game Ending In:');
+				fontBlack();
+				mainTimer.stop();
+				correctAlert();
+				postCongratsGif(question);
+				intervalTimer.printTime();//print interval time value to html
+				intervalTimer.start();//begin countdown of intervaltimer
+			};
+		});
 			$('.wrongAnswer').click(function(){
+				totalMisses++;//tally misses
+				if (!gameEnds){
 				$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question
 				fontBlack();
 				mainTimer.stop();
-				totalMisses++;//tally misses
 				nextQuestion();//add to currentQuestion value to make next question run in questionGen()
 				incorrectAlert();//display wrong answer screen
 				postWrongGif(question);//display current wrong answer gif (varies by question)
 				intervalTimer.printTime();//print interval time value to html
 				intervalTimer.start();//begin countdown of intervaltimer
-			});
+			}
+			else {
+				$('#timeHeading').html('Game Ending In:');
+				fontBlack();
+				mainTimer.stop();
+				incorrectAlert();
+				postWrongGif(question);
+				intervalTimer.printTime();//print interval time value to html
+				intervalTimer.start();//begin countdown of intervaltimer
+			};
+		});
+	};
+
+	function endCheck (){
+		if (currentQuestion === 7){
+			gameEnds = true;
+		};
 	};
 
 	//----------------END OF GLOBAL FUNCTIONS
@@ -297,6 +344,26 @@ $(document).ready(function() {
 		mainTimer.start();//start main timer
 		mainTimer.printTime();//print time value to HTML
 		questionGen(allQuestions[currentQuestion]);//pass first question into questionGen() in the question array
+	});
+
+	$('#restartButton').click(function(){
+		gameEnds = false;
+		currentQuestion = 0;
+		totalScore = 0;
+		totalMisses = 0;
+		$("#gifBox").empty();
+		$('#stats').css('display','none');
+		$('#restartButton').css('display','none');
+		$('#displayCorrectAnswer').html('');
+		$('#displayCorrectAnswer').html('');
+		$('#headerImg').css('width','150px'); //shrink header img, better for smaller screens
+		$('#triviaText').css('font-size','50px'); //see last comment ^
+		$('#startButton').css('display','none'); //hide start button
+		$('#timeHeading').css('display','initial'); //show timer heading
+		$('section').css('visibility','visible'); //show box with question content
+		mainTimer.start();//start main timer
+		mainTimer.printTime();//print time value to HTML
+		questionGen(allQuestions[currentQuestion]);
 	});
 
 	//----------------------------------------------------------------END OF SCRIPT	
