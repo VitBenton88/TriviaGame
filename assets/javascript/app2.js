@@ -237,7 +237,7 @@ $(document).ready(function() {
 	var outOfTimeImg = "assets/images/outOfTime.gif";
 	var endOfGameImg =  "assets/images/end.gif";
 	var currentCorrectAnswer;
-	var gameEnds = false;
+	var gameEnds = false;//true when game is over
 
 	//----------------END OF GLOBAL VARIABLES
 
@@ -274,7 +274,7 @@ $(document).ready(function() {
 	};
 
 	function questionGen(question){
-		endCheck();
+		endCheck();//when new question is posted, check if last
 		$('#currentQuestion').html(question.questionText);//print current question to HTML
 			for (i = 0; i < question.answerOptions.length; i++){//for loop pushes answer options into <ul> as <li>s
 				$('#listOptions').append('<li>' + question.answerOptions[i] + '</li>');
@@ -284,9 +284,9 @@ $(document).ready(function() {
 			};
 			$('.answer').click(function(){//if the right answer is clicked ...
 				totalScore++;//tally score to totalScore
-			if (!gameEnds){
-				fontBlack();//make time font black incase it went red if <11
-				mainTimer.stop();//clear interval for mainTimer
+			if (!gameEnds){//if question is not last question:
+				fontBlack();//make time font black incase it went red if < 11
+				mainTimer.stop();//stop and reset mainTimer
 				nextQuestion();//add to currentQuestion value to make next question run in questionGen()
 				correctAlert();//display correct answer screen
 				postCongratsGif(question);//display current correct answer gif (varies by question)
@@ -294,7 +294,7 @@ $(document).ready(function() {
 				intervalTimer.start();//begin countdown of intervaltimer
 			}
 			else {
-				$('#timeHeading').html('Game Ending In:');
+				$('#timeHeading').html('Game Ending In:');//if game is over ...
 				fontBlack();
 				mainTimer.stop();
 				correctAlert();
@@ -303,9 +303,9 @@ $(document).ready(function() {
 				intervalTimer.start();//begin countdown of intervaltimer
 			};
 		});
-			$('.wrongAnswer').click(function(){
+			$('.wrongAnswer').click(function(){//if the wrong answer is selected
 				totalMisses++;//tally misses
-				if (!gameEnds){
+				if (!gameEnds){//if question is not last question:
 				$('#timeHeading').html('Next Question In:');//print 'Next question in' to header above question
 				fontBlack();
 				mainTimer.stop();
@@ -316,7 +316,7 @@ $(document).ready(function() {
 				intervalTimer.start();//begin countdown of intervaltimer
 			}
 			else {
-				$('#timeHeading').html('Game Ending In:');
+				$('#timeHeading').html('Game Ending In:');//if game is over ...
 				fontBlack();
 				mainTimer.stop();
 				incorrectAlert();
