@@ -328,7 +328,7 @@ $(document).ready(function() {
 	};
 
 	function endCheck (){
-		if (currentQuestion === 7){
+		if (currentQuestion == allQuestions.length-1){//-1 because the question count starts at 1 not zero
 			gameEnds = true;
 		};
 	};
